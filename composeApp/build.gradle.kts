@@ -51,10 +51,12 @@ kotlin {
     
     sourceSets {
         val desktopMain by getting
+        val ktorVersion: String by project
         
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -63,9 +65,11 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.ktor.client.core)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }
@@ -106,6 +110,9 @@ android {
         debugImplementation(compose.uiTooling)
     }
 }
+dependencies {
+    implementation(libs.androidx.ui.desktop)
+}
 
 compose.desktop {
     application {
@@ -113,7 +120,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.chm.stockkankan"
+            packageName = "stockkankan"
             packageVersion = "1.0.0"
         }
     }
