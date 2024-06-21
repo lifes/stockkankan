@@ -126,8 +126,10 @@ compose.desktop {
             copyright = "© 2028 chm. All rights reserved."
             vendor = "Example vendor"
             licenseFile.set(project.file("../LICENSE"))
+
             macOS{
                 iconFile.set(file("icons/icon.icns"))
+                bundleID = "com.chm.stockkankan"
             }
             windows {
                 iconFile.set(file("icons/icon.ico"))
