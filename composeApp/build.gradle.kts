@@ -116,12 +116,22 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.chm.stockkankan.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "stockkankan"
             packageVersion = "1.0.0"
+            description = "description"
+            copyright = "© 2028 chm. All rights reserved."
+            vendor = "Example vendor"
+            licenseFile.set(project.file("../LICENSE"))
+            macOS{
+                iconFile.set(file("icons/icon.icns"))
+            }
+            windows {
+                iconFile.set(file("icons/icon.ico"))
+            }
         }
     }
 }
