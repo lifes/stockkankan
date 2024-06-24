@@ -40,8 +40,6 @@ fun App() {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Compose: $text")
                 }
-
-                StockInfoWindow()
             }
         }
     }

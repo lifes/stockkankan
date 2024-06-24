@@ -116,6 +116,13 @@ dependencies {
 
 compose.desktop {
     application {
+        //缩小包
+        buildTypes.release.proguard {
+            //开启混淆
+            obfuscate.set(true)
+            configurationFiles.from(project.file("compose-desktop.pro"))
+        }
+
         mainClass = "com.chm.stockkankan.MainKt"
 
         nativeDistributions {
@@ -130,6 +137,13 @@ compose.desktop {
             macOS{
                 iconFile.set(file("icons/icon.icns"))
                 bundleID = "com.chm.stockkankan"
+                //不显示在dock
+                infoPlist {
+                    extraKeysRawXml = """
+                        <key>LSUIElement</key>
+                        <string>true</string>
+                    """.trimIndent()
+                }
             }
             windows {
                 iconFile.set(file("icons/icon.ico"))

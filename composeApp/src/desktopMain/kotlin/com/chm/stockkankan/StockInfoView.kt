@@ -25,7 +25,7 @@ import java.nio.charset.Charset
 
 @Preview
 @Composable
-fun StockInfoView() {
+fun StockInfoView(stockCodes: List<String>) {
     Window(
         onCloseRequest = {},
         title = "股票窗口",
@@ -38,11 +38,11 @@ fun StockInfoView() {
             val javaVersion = getJdkInfo()
             Column(modifier = Modifier.fillMaxSize().alpha(0.8F).background(Color.Black)) {
                 var text by remember { mutableStateOf("Loading") }
-                LaunchedEffect(true) {
+                LaunchedEffect(Unit) {
                     var a = 0
                     while(true){
                         text = try {
-                            StockHttpUtil.getStokInfo()
+                            StockHttpUtil.getStokInfo(stockCodes)
                         } catch (e: Exception) {
                             e.stackTraceToString() ?: "error"
                         }
@@ -58,9 +58,9 @@ fun StockInfoView() {
 }
 
 object StockHttpUtil{
-    val client  = HttpClient()
-    suspend fun getStokInfo(): String {
-        val url = "https://qt.gtimg.cn/utf8/?q=sz300418,sz002761"
+    private val client  = HttpClient()
+    suspend fun getStokInfo(stockCodes: List<String>): String {
+        val url = "https://qt.gtimg.cn/utf8/?q="+stockCodes.joinToString(",")
         val response = client.get(url)
         val lines = response.bodyAsText(Charset.forName("utf-8")).split("\n")
 
@@ -75,7 +75,7 @@ object StockHttpUtil{
 
         val stockInfos = mutableListOf<StockInfo>()
         for (line in lines) {
-            if (line.isBlank()) continue;
+            if (line.isBlank()) continue
             val values = line.substring(line.indexOf("=") + 2, line.length - 2).split("~")
             val stockInfo = StockInfo(values[1], values[4], values[3], values[32] + '%')
             stockInfos.add(stockInfo)
@@ -93,7 +93,6 @@ fun getJdkInfo(): String = buildString {
     appendLine("Java version: "+System.getProperty("java.version"))
     appendLine("Java vendor: "+System.getProperty("java.vendor"))
     //appendLine("Java home: "+System.getProperty("java.home"))
-
     //appendLine("Os name: "+System.getProperty("os.name"))
     //appendLine("Os arch: "+System.getProperty("os.arch"))
     //appendLine("Os version: "+System.getProperty("os.version"))
