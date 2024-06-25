@@ -28,7 +28,7 @@ fun App() {
                 val greeting = remember { Greeting().greet() }
                 var text by remember { mutableStateOf("Loading") }
                 val scope = rememberCoroutineScope()
-                LaunchedEffect(true) {
+                LaunchedEffect(Unit) {
                     scope.launch {
                         text = try {
                             Greeting().getText()

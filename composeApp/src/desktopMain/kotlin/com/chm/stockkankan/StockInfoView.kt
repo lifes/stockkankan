@@ -4,6 +4,7 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,12 +12,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowState
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -25,24 +30,28 @@ import java.nio.charset.Charset
 
 @Preview
 @Composable
-fun StockInfoView(stockCodes: List<String>) {
+fun StockInfoView(stockCodes: List<String>, windowState: WindowState) {
+    val windowPosition = rememberSaveable {
+        mutableStateOf(IntOffset.Zero)
+    }
+
     Window(
         onCloseRequest = {},
         title = "股票窗口",
         transparent = true,
         undecorated = true,
         alwaysOnTop = true,
-
+        state = windowState
     ) {
         WindowDraggableArea {
             val javaVersion = getJdkInfo()
-            Column(modifier = Modifier.fillMaxSize().alpha(0.8F).background(Color.Black)) {
+            Column(modifier = Modifier.fillMaxSize().alpha(0.8F).background(Color.Black).padding(5.dp)) {
                 var text by remember { mutableStateOf("Loading") }
-                LaunchedEffect(Unit) {
+                LaunchedEffect(stockCodes) {
                     var a = 0
                     while(true){
                         text = try {
-                            StockHttpUtil.getStokInfo(stockCodes)
+                            StockHttpUtil.getStockInfo(stockCodes)
                         } catch (e: Exception) {
                             e.stackTraceToString() ?: "error"
                         }
@@ -51,6 +60,7 @@ fun StockInfoView(stockCodes: List<String>) {
                         delay(1000)
                     }
                 }
+                Text(stockCodes.toString(), color = Color.White)
                 Text("$text", color = Color.White, fontSize = 11.sp, lineHeight = 18.sp);
             }
         }
@@ -59,7 +69,11 @@ fun StockInfoView(stockCodes: List<String>) {
 
 object StockHttpUtil{
     private val client  = HttpClient()
-    suspend fun getStokInfo(stockCodes: List<String>): String {
+
+    suspend fun getStockInfo(stockCodes: String): String {
+      return  getStockInfo(stockCodes.split(","))
+    }
+    suspend fun getStockInfo(stockCodes: List<String>): String {
         val url = "https://qt.gtimg.cn/utf8/?q="+stockCodes.joinToString(",")
         val response = client.get(url)
         val lines = response.bodyAsText(Charset.forName("utf-8")).split("\n")
