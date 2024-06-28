@@ -1,6 +1,5 @@
 package com.chm.stockkankan
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,12 +11,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
@@ -28,13 +25,9 @@ import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.delay
 import java.nio.charset.Charset
 
-@Preview
+
 @Composable
 fun StockInfoView(stockCodes: List<String>, windowState: WindowState) {
-    val windowPosition = rememberSaveable {
-        mutableStateOf(IntOffset.Zero)
-    }
-
     Window(
         onCloseRequest = {},
         title = "股票窗口",
@@ -90,9 +83,11 @@ object StockHttpUtil{
         val stockInfos = mutableListOf<StockInfo>()
         for (line in lines) {
             if (line.isBlank()) continue
-            val values = line.substring(line.indexOf("=") + 2, line.length - 2).split("~")
-            val stockInfo = StockInfo(values[1], values[4], values[3], values[32] + '%')
-            stockInfos.add(stockInfo)
+            if(!line.contains("v_pv_none_match")){
+                val values = line.substring(line.indexOf("=") + 2, line.length - 2).split("~")
+                val stockInfo = StockInfo(values[1], values[4], values[3], values[32] + '%')
+                stockInfos.add(stockInfo)
+            }
         }
 
         return buildString {
