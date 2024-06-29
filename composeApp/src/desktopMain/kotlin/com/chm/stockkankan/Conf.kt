@@ -45,7 +45,7 @@ fun StockCodesTextField(stockCodes:List<String>, onSave: (List<String>) -> Unit 
             modifier = Modifier.padding(top = 100.dp)
         ){
             Text(fileName)
-            Text("")
+            Text("0000")
         }
     }
 }

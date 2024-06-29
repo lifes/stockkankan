@@ -16,6 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
@@ -34,10 +37,15 @@ fun StockInfoView(stockCodes: List<String>, windowState: WindowState) {
         transparent = true,
         undecorated = true,
         alwaysOnTop = true,
-        state = windowState
+        state = windowState,
     ) {
+        //设置最小窗口大小
+        with (LocalDensity.current) {
+            val minSize = DpSize(25.dp, 25.dp).toSize()
+            window.minimumSize = java.awt.Dimension(minSize.width.toInt(), minSize.height.toInt())
+        }
         WindowDraggableArea {
-            Column(modifier = Modifier.fillMaxSize().alpha(0.8F).background(Color.Black),
+            Column(modifier = Modifier.fillMaxSize().background(Color.Black).alpha(0.9f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 var text by remember { mutableStateOf("Loading") }
@@ -51,7 +59,7 @@ fun StockInfoView(stockCodes: List<String>, windowState: WindowState) {
                         delay(1000)
                     }
                 }
-                Text("$text", color = Color.White, fontSize = 11.sp, lineHeight = 18.sp);
+                Text("$text", color = Color.White, fontSize = 11.sp, lineHeight = 18.sp)
             }
         }
     }
