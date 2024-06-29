@@ -48,7 +48,7 @@ fun StockInfoView(stockCodes: List<String>, windowState: WindowState) {
                         } catch (e: Exception) {
                             e.stackTraceToString() ?: "error"
                         }
-                        delay(100)
+                        delay(1000)
                     }
                 }
                 Text("$text", color = Color.White, fontSize = 11.sp, lineHeight = 18.sp);

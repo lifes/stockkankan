@@ -44,8 +44,8 @@ fun StockCodesTextField(stockCodes:List<String>, onSave: (List<String>) -> Unit 
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 100.dp)
         ){
-            val file = File("conf001.txt")
-            Text(File("").absolutePath+"/" + file.name)
+            Text(fileName)
+            Text("")
         }
     }
 }

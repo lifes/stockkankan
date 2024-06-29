@@ -18,6 +18,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+
 fun main() = application {
 
     var showStockInfoView by remember { mutableStateOf(false) }
@@ -51,8 +52,7 @@ fun main() = application {
             WindowDraggableArea {
                 YesNoDialog(
                     onYes = {
-                        val file = File(fileName)
-                        saveTofile(file, stockCodes)
+                        saveTofile(File(fileName), stockCodes)
                         exitApplication()
                     },
                     onNo = {},
@@ -63,7 +63,10 @@ fun main() = application {
 
     if (showConfWindow) {
         Window(
-            onCloseRequest = { showConfWindow = false },
+            onCloseRequest = {
+                saveTofile(File(fileName), stockCodes)
+                showConfWindow = false
+            },
             title = "配置"
         ) {
             StockCodesTextField(stockCodes,
@@ -72,7 +75,7 @@ fun main() = application {
     }
 }
 
-val fileName = "conf001.txt"
+val fileName = System.getProperty("user.home") + File.separator + ".conf001.txt"
 val stockCodes0 = getStockCodesFromFile(File(fileName))
 fun saveTofile(file: File, stockCodes: List<String>) {
     try {
@@ -89,8 +92,8 @@ fun saveTofile(file: File, stockCodes: List<String>) {
 
 fun getStockCodesFromFile(file: File): List<String> {
     try {
-        if(!file.exists()){
-            return listOf()
+        if (!file.exists()) {
+            return listOf("sz300418")
         }
         var stockString = ""
         BufferedReader(FileReader(file)).use { reader ->
@@ -99,7 +102,6 @@ fun getStockCodesFromFile(file: File): List<String> {
                 stockString += line
             }
         }
-        println("a" + stockString)
         return stockString.split(",").map { it.trim() }.filter { it.isNotBlank() }
     } catch (e: Exception) {
         e.printStackTrace()
