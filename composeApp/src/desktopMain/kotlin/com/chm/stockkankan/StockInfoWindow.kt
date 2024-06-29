@@ -1,9 +1,9 @@
 package com.chm.stockkankan
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,10 +12,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
@@ -37,23 +37,20 @@ fun StockInfoView(stockCodes: List<String>, windowState: WindowState) {
         state = windowState
     ) {
         WindowDraggableArea {
-            val javaVersion = getJdkInfo()
-            Column(modifier = Modifier.fillMaxSize().alpha(0.8F).background(Color.Black).padding(5.dp)) {
+            Column(modifier = Modifier.fillMaxSize().alpha(0.8F).background(Color.Black),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally) {
                 var text by remember { mutableStateOf("Loading") }
                 LaunchedEffect(stockCodes) {
-                    var a = 0
                     while(true){
                         text = try {
                             StockHttpUtil.getStockInfo(stockCodes)
                         } catch (e: Exception) {
                             e.stackTraceToString() ?: "error"
                         }
-                        a = a+1
-                        text = "$javaVersion$a:\n$text"
-                        delay(1000)
+                        delay(100)
                     }
                 }
-                Text(stockCodes.toString(), color = Color.White)
                 Text("$text", color = Color.White, fontSize = 11.sp, lineHeight = 18.sp);
             }
         }
@@ -71,8 +68,6 @@ object StockHttpUtil{
         val response = client.get(url)
         val lines = response.bodyAsText(Charset.forName("utf-8")).split("\n")
 
-        println("我被执行了")
-
         data class StockInfo(
             val name: String,
             val yestClose: String,
@@ -89,12 +84,7 @@ object StockHttpUtil{
                 stockInfos.add(stockInfo)
             }
         }
-
-        return buildString {
-            for(stockInfo in stockInfos) {
-                append(stockInfo.name + " " + stockInfo.changeRate + "\n")
-            }
-        }
+        return stockInfos.joinToString(separator = "\n") {"${it.name} ${it.changeRate}"}
     }
 }
 fun getJdkInfo(): String = buildString {

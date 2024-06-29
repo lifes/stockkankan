@@ -40,8 +40,8 @@ fun YesNoDialog(
                 }
             }
         },
-        title = { Text(text = "MusicApp-KMP") },
-        text = { Text(text = "Do you want to save the application's state?") },
+        title = { Text(text = "退出会保存配置的股票信息") },
+        text = { Text(text = "你真的要退出吗？") },
         modifier = Modifier.width(400.dp),
     )
 }
