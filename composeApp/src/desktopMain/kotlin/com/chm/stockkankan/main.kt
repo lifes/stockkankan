@@ -77,7 +77,6 @@ fun main() = application {
             },
             title = "配置",
             state = confWindowState
-
         ) {
             StockCodesTextField(stockCodes,
                 onSave = { stockCodes = it })
