@@ -5,10 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import org.jetbrains.compose.resources.painterResource
@@ -66,13 +68,16 @@ fun main() = application {
         }
     }
 
+    val confWindowState = rememberWindowState(position = WindowPosition.Aligned(Alignment.Center))
     if (showConfWindow) {
         Window(
             onCloseRequest = {
                 saveTofile(File(fileName), stockCodes)
                 showConfWindow = false
             },
-            title = "配置"
+            title = "配置",
+            state = confWindowState
+
         ) {
             StockCodesTextField(stockCodes,
                 onSave = { stockCodes = it })
