@@ -28,11 +28,6 @@ fun YesNoDialog(
                 TextButton(onClick = onCancel) {
                     Text(text = "Cancel")
                 }
-
-                TextButton(onClick = onNo) {
-                    Text(text = "No")
-                }
-
                 TextButton(onClick = {
                     onYes()
                 }) {
