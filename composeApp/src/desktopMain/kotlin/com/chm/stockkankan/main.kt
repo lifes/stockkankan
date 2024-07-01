@@ -27,7 +27,6 @@ fun main() = application {
     var showStockInfoView by remember { mutableStateOf(false) }
     var onCloseRequested by remember { mutableStateOf(false) }
     var windowState = rememberWindowState(size = DpSize(100.dp, 80.dp))
-    var quitDialogWindowState = rememberWindowState(size = DpSize(300.dp, 200.dp))
     var showConfWindow by remember { mutableStateOf(false) }
     var stockCodes by remember { mutableStateOf(stockCodes0) }
 
@@ -53,9 +52,9 @@ fun main() = application {
     if (onCloseRequested) {
         Window(
             title = "",
-            onCloseRequest = {},
+            onCloseRequest = {onCloseRequested =  false},
             alwaysOnTop = true,
-            state = quitDialogWindowState
+            state = WindowState(size = DpSize(300.dp, 200.dp), position = WindowPosition.Aligned(Alignment.Center))
         ) {
             WindowDraggableArea {
                 YesNoDialog(
