@@ -88,8 +88,11 @@ object StockHttpUtil{
             if (line.isBlank()) continue
             if(!line.contains("v_pv_none_match")){
                 val values = line.substring(line.indexOf("=") + 2, line.length - 2).split("~")
-                val stockInfo = StockInfo(values[1], values[4], values[3], values[32] + '%')
-                stockInfos.add(stockInfo)
+                //fix s？
+                if(values.size > 32){
+                    val stockInfo = StockInfo(values[1], values[4], values[3], values[32] + '%')
+                    stockInfos.add(stockInfo)
+                }
             }
         }
         return stockInfos.joinToString(separator = "\n") {"${it.name} ${it.changeRate}"}
