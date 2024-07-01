@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun YesNoDialog(
     onYes: () -> Unit,
-    onNo: () -> Unit,
     onCancel: () -> Unit,
 ) {
     AlertDialog(

@@ -62,7 +62,6 @@ fun main() = application {
                         saveTofile(File(fileName), stockCodes)
                         exitApplication()
                     },
-                    onNo = {},
                     onCancel = { onCloseRequested = false })
             }
         }
