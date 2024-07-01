@@ -45,7 +45,7 @@ fun StockInfoView(stockCodes: List<String>, windowState: WindowState) {
             window.minimumSize = java.awt.Dimension(minSize.width.toInt(), minSize.height.toInt())
         }
         WindowDraggableArea {
-            Column(modifier = Modifier.fillMaxSize().background(Color.Black).alpha(0.8f),
+            Column(modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.2f)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 var text by remember { mutableStateOf("Loading") }
