@@ -16,8 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import java.io.File
-
 
 @Composable
 fun StockCodesTextField(stockCodes:List<String>, onSave: (List<String>) -> Unit = {}) {
@@ -44,6 +42,7 @@ fun StockCodesTextField(stockCodes:List<String>, onSave: (List<String>) -> Unit 
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 100.dp)
         ){
+            Text("配置文件位置 ", modifier = Modifier.width(100.dp))
             Text(fileName)
         }
     }
