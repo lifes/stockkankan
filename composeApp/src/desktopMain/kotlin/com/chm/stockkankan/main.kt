@@ -30,7 +30,12 @@ fun main() = application {
 
     Tray(icon = painterResource(Res.drawable.fa_vicon),
         menu = {
-            Item("配置", onClick = { showConfWindow = true })
+            Item("配置", onClick = {
+                showConfWindow = !showConfWindow
+                if(!showConfWindow){
+                    saveTofile(File(fileName), stockCodes)
+                }
+            })
             Separator()
             Item("老板键", onClick = {
                 showStockInfoView = !showStockInfoView
