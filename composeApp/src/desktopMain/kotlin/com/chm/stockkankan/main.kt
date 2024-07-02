@@ -67,6 +67,7 @@ fun main() = application {
         }
     }
 
+
     if (showConfWindow) {
         Window(
             onCloseRequest = {
@@ -74,8 +75,9 @@ fun main() = application {
                 showConfWindow = false
             },
             title = "配置",
-            state = WindowState(position = WindowPosition.Aligned(Alignment.Center))
+            state = rememberWindowState(position = WindowPosition.Aligned(Alignment.Center))
         ) {
+            println("conf 我被重组了")
             StockCodesTextField(stockCodes,
                 onSave = { stockCodes = it })
         }
