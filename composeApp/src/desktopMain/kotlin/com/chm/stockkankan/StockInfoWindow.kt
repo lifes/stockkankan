@@ -25,6 +25,11 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.delay
+import net.sourceforge.pinyin4j.PinyinHelper
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination
 import java.nio.charset.Charset
 
 
@@ -76,7 +81,7 @@ object StockHttpUtil{
         val lines = response.bodyAsText(Charset.forName("utf-8")).split("\n")
 
         data class StockInfo(
-            val name: String,
+            var name: String,
             val yestClose: String,
             val currentPrice: String,
             val changeRate: String
@@ -94,6 +99,12 @@ object StockHttpUtil{
                 }
             }
         }
+
+        for (stockInfo in stockInfos){
+
+            stockInfo.name = getFirstSpell(stockInfo.name)
+
+        }
         return stockInfos.joinToString(separator = "\n") {"${it.name} ${it.changeRate}"}
     }
 }
@@ -105,4 +116,27 @@ fun getJdkInfo(): String = buildString {
     //appendLine("Os name: "+System.getProperty("os.name"))
     //appendLine("Os arch: "+System.getProperty("os.arch"))
     //appendLine("Os version: "+System.getProperty("os.version"))
+}
+
+fun getFirstSpell(chinese: String): String {
+    val pybf = StringBuffer()
+    val arr = chinese.toCharArray()
+    val defaultFormat = HanyuPinyinOutputFormat()
+    defaultFormat.caseType = HanyuPinyinCaseType.LOWERCASE
+    defaultFormat.toneType = HanyuPinyinToneType.WITHOUT_TONE
+    for (i in arr.indices) {
+        if (arr[i].code > 128) {
+            try {
+                val temp = PinyinHelper.toHanyuPinyinStringArray(arr[i], defaultFormat)
+                if (temp != null) {
+                    pybf.append(temp[0][0])
+                }
+            } catch (e: BadHanyuPinyinOutputFormatCombination) {
+                e.printStackTrace()
+            }
+        } else {
+            pybf.append(arr[i])
+        }
+    }
+    return pybf.toString().replace("\\W".toRegex(), "").trim { it <= ' ' }
 }

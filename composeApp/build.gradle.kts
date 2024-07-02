@@ -71,6 +71,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.okhttp)
+            implementation("com.belerweb:pinyin4j:2.5.1")
         }
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)
