@@ -54,7 +54,7 @@ fun main() = application {
             title = "",
             onCloseRequest = {onCloseRequested =  false},
             alwaysOnTop = true,
-            state = WindowState(size = DpSize(300.dp, 200.dp), position = WindowPosition.Aligned(Alignment.Center))
+            state = rememberWindowState(size = DpSize(300.dp, 200.dp), position = WindowPosition.Aligned(Alignment.Center))
         ) {
             WindowDraggableArea {
                 YesNoDialog(
