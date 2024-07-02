@@ -1,5 +1,6 @@
 package com.chm.stockkankan
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,6 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.painterResource
+import stockkankan.composeapp.generated.resources.Res
+import stockkankan.composeapp.generated.resources.author_weixin
 
 @Composable
 fun StockCodesTextField(stockCodes:List<String>, onSave: (List<String>) -> Unit = {}) {
@@ -40,10 +44,18 @@ fun StockCodesTextField(stockCodes:List<String>, onSave: (List<String>) -> Unit 
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 100.dp)
+            modifier = Modifier.padding(top = 10.dp)
         ){
             Text("配置文件位置 ", modifier = Modifier.width(100.dp))
             Text(fileName)
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 10.dp)
+        ){
+            Text("加作者微信, 参与软件优化讨论，股票交流等")
+            Image(painter = painterResource(Res.drawable.author_weixin), contentDescription = "作者微信")
         }
     }
 }
